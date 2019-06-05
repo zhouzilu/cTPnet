@@ -50,7 +50,7 @@ See Jingshu's github for more details
 
 ## Citation
 
-Please cite DENDRO.
+Please cite cTP-net.
 
 * **cTP-net**: [link](https://www.biorxiv.org/content/early/2018/10/30/457622)
 <br>

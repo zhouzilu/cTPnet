@@ -12,11 +12,11 @@
 cTPnet=function(data,data_type='Seurat2',model_file_path){
   print('Start data preprocessing...')
 	if(data_type=='Seurat2'){
-		data=preprocess_seurat2(data)
+		X=preprocess_seurat2(data)
 	}else if(data_type=='Seurat3'){
-		data=preprocess_seurat3(data)
+		X=preprocess_seurat3(data)
 	}else if (data_type=='matrix'|data_type=='dataframe'){
-		data=preprocess_matrix(data)
+		X=preprocess_matrix(data)
 	}else{
 		print('Error: unrecognizable data_type argument. Need to be one of the four\n
 		      options: Seurat2, Seurat3, matrix, dataframe. You can check your \n
@@ -25,7 +25,7 @@ cTPnet=function(data,data_type='Seurat2',model_file_path){
 	}
   print('Start imputation...')
 	ctpnet <- reticulate::import("ctpnet", convert = F)
-	y_pred=reticulate::py_to_r(ctpnet$predict$predict(data,model_file_path))
+	y_pred=reticulate::py_to_r(ctpnet$predict$predict(X,model_file_path))
 	print('Postprocess...')
 	if(data_type=='Seurat2'){
 	  data=postprocess_seurat2(data,y_pred)
