@@ -6,7 +6,7 @@ postprocess_seurat2=function(seurat_data,y_pred){
 }
 
 postprocess_seurat3=function(seurat_data,y_pred){
-  seurat_data[["cTPnet"]] <- CreateAssayObject(data = seurat_data)
+  seurat_data[["cTPnet"]] <- CreateAssayObject(data = as.matrix(y_pred))
   return(seurat_data)
 }
 
