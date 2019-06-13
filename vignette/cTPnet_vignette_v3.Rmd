@@ -1,0 +1,215 @@
+---
+title: "cTP-net Vignette (Seurat v3)"
+author: "Zilu Zhou"
+date: "06/05/2019"#"`r Sys.Date()`"
+abstract: >
+ While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint, no link yet](www.rstudio.com)
+output: 
+  rmarkdown::html_document:
+    theme: united
+    highlight: tango
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: DENDRO.bibtex
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# 1. Installation
+## 1.1 Install cTP-net
+### 1.1.1 Support Python package
+First, install the supporting Python package ctpnetpy. See the source code of the package [here](http://github.com/zhouzilu/ctpnetpy)
+
+```python
+pip install ctpnetpy
+```
+### 1.1.2 R package
+Next, open R and install the R package cTPnet
+```{r, eval=FALSE}
+devtools::install_github("zhouzilu/cTPnet")
+```
+
+### 1.1.3 Pretrained model
+Download the pretrained model from xxxx
+
+## 1.2 Install SAVER-X (Highly recommended)
+In addition, if you want to denoise your raw scRNA counts, please follow the SAVER-X installation pipeline. Modified from https://github.com/jingshuw/SAVERX
+
+### 1.2.1 Support Python package
+Install supporting Python package sctransfer.
+```python
+pip install sctransfer
+```
+### 1.2.2 R package
+Install R pacakge.
+```R
+devtools::install_github("jingshuw/SAVERX")
+```
+### 1.2.3 Pretrained model
+Download the pretrained model from xxxx
+
+Currently, SAVER-X do not support for super large data sets (test failed for 270,000 cells and 200GB RAM). cTP-net, on the other hand, can predict surface protein abundance relatively accurate without denoising.
+
+
+# 2. Questions & issues
+If you have any questions or problems when using cTPnet or ctpnetpy, please feel free to open a new issue [here](https://github.com/zhouzilu/cTPnet/issues). You can also email the maintainers of the corresponding packages -- 
+
+* [Zilu Zhou](https://statistics.wharton.upenn.edu/profile/zhouzilu/) (zhouzilu at pennmedicine dot upenn dot edu)
+  <br>
+  Genomics and Computational Biology Graduate Group, UPenn
+
+* [Nancy R. Zhang](https://statistics.wharton.upenn.edu/profile/nzh/) (nzh at wharton dot upenn dot edu)
+  <br>
+  Department of Statistics, UPenn
+
+# 3. cTP-net analysis pipeline
+
+To accurately impute surface protein abundance from scRNA-seq data, cTP-net employs two steps: (1) denoising of the scRNA-seq count matrix and (2) imputation based on the denoised data through a transcriptome-protein mapping (Figure 1).  The initial denoising, by SAVERX, produces more accurate estimates of the RNA transcript relative abundances for each cell.  Compared to the raw counts, the denoised relative expression values have significantly improved correlation with their cognate protein measurement.  
+
+```{r, out.width = "1000px", fig.align = "center", echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/zhouzilu/cTPnet/master/figure/Pkg_FIG-01.jpg")
+```
+  **Figure 1**. *(a)* Overview of cTP-net analysis pipeline, which learns a mapping from the denoised scRNA-seq data to the relative abundance of surface proteins, capturing multi-gene features that reflect the cellular environment and related processes. *(b)* For three example proteins, cross-cell scatter and correlation of CITE-seq measured abundances vs. (1) raw RNA count, (2) SAVER-X denoised RNA level, and (3) cTP-net predicted protein abundance.
+
+## 3.1 Raw counts denoising with SAVER-X 
+Please refer to [SAVER-X package](https://github.com/jingshuw/SAVERX) for detailed instruction. As for this vignette, we load a demo data set (10000 genes $\times$ 1000 cells) from Human Cell Atalas that has been already denoised with SAVER-X.
+
+```{r, message=FALSE, warning=FALSE}
+library(cTPnet)
+library(Seurat)
+data("cTPnet_demo")
+str(demo)
+```
+
+## 3.2 Immunophenotype (surface protein) imputation
+### 3.2.1 Seurat v2 pipeline
+
+Let's create a seurat object `demo` and generate the prediction.
+```{r, message=FALSE, warning=FALSE, fig.width=14}
+data_type='Seurat2'
+demo = CreateSeuratObject(demo_dn)
+demo = cTPnet(demo,data_type='Seurat2',model_file_path)
+```
+
+### 3.2.2 Following analysis (Modified from )
+```{r}
+# standard log-normalization
+demo <- NormalizeData(demo)
+# choose ~1k variable features
+demo <- FindVariableFeatures(demo)
+
+# standard scaling (no regression)
+demo <- ScaleData(demo)
+
+# Run PCA, select 13 PCs for tSNE visualization and graph-based clustering
+demo <- RunPCA(demo, verbose = FALSE)
+ElbowPlot(demo, ndims = 50)
+
+demo <- FindNeighbors(demo, dims = 1:25)
+demo <- FindClusters(demo, resolution = 0.8)
+demo <- RunTSNE(demo, dims = 1:25, method = "FIt-SNE")
+```
+
+### 3.2.3 Visualize imputed protein levels on RNA clusters
+```{r}
+FeaturePlot(cbmc, features = c("cTPnet-CD3", "cTPnet-CD11c", "cTPnet-CD8", "cTPnet-CD16", "CD3E", "ITGAX", "CD8A", 
+    "FCGR3A"), min.cutoff = "q05", max.cutoff = "q95", ncol = 4)
+RidgePlot(cbmc, features = c("cTPnet-CD3", "cTPnet-CD11c", "cTPnet-CD8", "cTPnet-CD16"), ncol = 2)
+```
+
+### 3.2.4 Determine the cell markers with helps from imputed proteins
+```{r}
+# Find the markers that define each cluster, and use these to annotate the clusters, we use
+# max.cells.per.ident to speed up the process
+demo.rna.markers <- FindAllMarkers(demo, max.cells.per.ident = 100, min.diff.pct = 0.3, only.pos = TRUE)
+
+# Note, for simplicity we are merging two CD14+ Monocyte clusters (that differ in expression of
+# HLA-DR genes) and NK clusters (that differ in cell cycle stage)
+new.cluster.ids <- c("Memory CD4 T", "CD14+ Mono", "Naive CD4 T", "NK", "CD14+ Mono", "Mouse", "B", 
+    "CD8 T", "CD16+ Mono", "T/Mono doublets", "NK", "CD34+", "Multiplets", "Mouse", "Eryth", "Mk", 
+    "Mouse", "DC", "pDCs")
+names(new.cluster.ids) <- levels(demo)
+demo <- RenameIdents(demo, new.cluster.ids)
+
+DimPlot(demo, label = TRUE) + NoLegend()
+```
+
+
+### 3.2.2 Seurat v3 pipeline (Modified from https://satijalab.org/seurat/v3.0/multimodal_vignette.html)
+
+Let's create a seurat object `demo` and generate the prediction.
+```{r, message=FALSE, warning=FALSE, fig.width=14}
+data_type='Seurat3'
+demo = CreateSeuratObject(counts=demo_dn)
+demo = cTPnet(demo,data_type='Seurat3',model_file_path)
+```
+
+### 3.3.2 Clustering with the genetic divergence matrix
+
+Let's apply hierachical clustering and plot out the clustering result colored by known true label: `demo_qc$clade`. Check `DENDRO.cluster` for more details.
+
+```{r, message=FALSE, warning=FALSE, fig.width=14}
+demo_qc$cluster = DENDRO.cluster(demo_qc$dist,label=demo_qc$label)
+```
+
+Let's decided the optimal number of clusters using an intra-cluster divergence (icd) measurements.
+
+```{r, message=FALSE, warning=FALSE}
+demo_qc$icd = DENDRO.icd(demo_qc$dist,demo_qc$cluster)
+demo_qc$optK = 3
+demo_qc$DENDRO_label = cutree(demo_qc$cluster,demo_qc$optK)
+```
+
+We decide the optimal number of cluster by identifying kink or "elbow point" in the icd plot. In this example, `optK = 3`. It is crucial that if there are multiple "elbow point", the *smallest* one is the most robust.
+
+Let's re-plot our data with DENDRO label
+
+```{r, message=FALSE, warning=FALSE, fig.width=14}
+demo_qc$cluster = DENDRO.cluster(demo_qc$dist,label=demo_qc$DENDRO_label)
+```
+
+### 3.3.3 Re-estimate mutation profile within each cluster and QC
+
+DENDRO further re-esimate the subclone-level mutation profiles by pooling all reads within each reads together with a maximum liklihood approach [@li2012likelihood]. Check `??DENDRO.recalculate` for more details.
+
+```{r, message=FALSE, warning=FALSE}
+demo_cluster = DENDRO.recalculate(demo_qc$X,demo_qc$N, demo_qc$Info, demo_qc$DENDRO_label, cluster.name=c('Cluster3','Cluster2','Cluster1'))
+```
+`cluster.name` specifies the cluster name given the clustering order (1, 2, 3, ...).
+
+## 3.4 Stage III
+### 3.4.1 Evolutionary tree construction
+
+Given the filtered cluster-level mutation profiles, we now can construct an neighbor-joining tree using algorithm implemented in package `phangorn`. See `??DENDRO.tree` for more details.
+
+```{r, message=FALSE, warning=FALSE}
+DENDRO.tree(demo_cluster$Z)
+```
+
+In this phylogenetic tree, Cluster1 has greater genetic divergence compared with Cluster2 and Cluster3, which is consistent with our data generating process. 
+
+### 3.4.2 Other analysis
+
+User could further perform joint differential expression analysis and differential mutation analysis between different subclone groups. Mutation profile across clones is sored at `demo_cluster$Z`.
+
+Differential expression analysis packages are wide-spread. Two methods that I personally preferred are [Seurat MAST implementation](https://satijalab.org/seurat/get_started.html) [@seurat2018] and [scDD](https://bioconductor.org/packages/release/bioc/html/scDD.html) [@scDD2016].
+
+Gene set enrichment analysis is available at [MSigDB, Broad Institute](http://software.broadinstitute.org/gsea/msigdb/) [@gsea2005].
+
+
+# 4. Session info
+
+```{r sessionInfo}
+sessionInfo()
+```
+
+# 5. References
+

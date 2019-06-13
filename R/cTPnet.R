@@ -18,10 +18,9 @@ cTPnet=function(data,data_type='Seurat2',model_file_path){
 	}else if (data_type=='matrix'|data_type=='dataframe'){
 		X=preprocess_matrix(data)
 	}else{
-		cat('Error: unrecognizable data_type argument. Need to be one of the four\n
+		stop('Error: unrecognizable data_type argument. Need to be one of the four\n
 		      options: Seurat2, Seurat3, matrix, dataframe. You can check your \n
 		      Seurat version by sessionInfo()\n')
-		break
 	}
   cat('Start imputation. Running python ...\n')
 	ctpnet <- reticulate::import("ctpnet", convert = F)
