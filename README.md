@@ -3,58 +3,39 @@ single cell Transcriptome to Protein prediction with deep neural network (cTP-ne
 
 ## Manuscript
 
-([link]())
+[Surface protein imputation from single cell transcriptomes by deep neural networks]()
 
 
 ## Questions & Problems
 
 If you have any questions or problems when using cTPnet or ctpnetpy, please feel free to open a new issue [here](https://github.com/zhouzilu/cTPnet/issues). You can also email the maintainers of the corresponding packages -- the contact information is shown under Developers & Maintainers.
 
-
-## Installation
-
-Install to R/RStudio
-Install all packages in the latest version of [R](https://www.r-project.org/).
-First, install the supporting Python package ctpnetpy. See the source code of the package [here](http://github.com/zhouzilu/ctpnetpy)
-
-```python
-pip install ctpnetpy
-```
-
-Next, open R and install the R package cTPnet
-```r
-devtools::install_github("zhouzilu/cTPnet")
-```
-
-
 ## Pipeline overview
 
 This cTPnet package includes two analysis tools: (1) **SAVERX**, we stronly recommend denoise the scRNA-seq data before impute the surface protein abundance, and (2) **cTP-net**, which impute the surface protein abundance based on previously trained model. 
 
-### SAVERX pipeline
-
-See Jingshu's github for more details
-
-### cTP-net pipeline
-
 <p align="center">
-  <img src='https://raw.githubusercontent.com/zhouzilu/DENDRO/master/figure/Pkg_FIG-01.jpg' width='1000' height='600'>
+  <img src="https://raw.githubusercontent.com/zhouzilu/cTPnet/master/figure/FIG_pkg.jpg" width='800'>
   </p>
 
-  **Figure 1.** A flowchart outlining the procedures of cTPnet. **Need update after submit manuscripts**.
+  **Figure 1.**  *(a)* Overview of cTP-net analysis pipeline, which learns a mapping from the denoised scRNA-seq data to the relative abundance of surface proteins, capturing multi-gene features that reflect the cellular environment and related processes. *(b)* For three example proteins, cross-cell scatter and correlation of CITE-seq measured abundances vs. (1) raw RNA count, (2) SAVER-X denoised RNA level, and (3) cTP-net predicted protein abundance.
 
-### Running cTP-net
+## Running cTP-net
+For different Seurat version, we developed separate vignette see below:
 
-  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://rawgit.com/zhouzilu/DENDRO/master/vignette/DENDRO_vignette.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/DENDRO/blob/master/vignette/DENDRO_vignette.Rmd).
+### Seurat v2
+  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://rawgit.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v2.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/master/blob/master/vignette/cTPnet_vignette_v2.Rmd).
+
+### Seurat v3
+  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://rawgit.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v3.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v3.Rmd).
 
 
 ## Citation
 
 Please cite cTP-net.
 
-* **cTP-net**: [link](https://www.biorxiv.org/content/early/2018/10/30/457622)
+* **cTP-net**: [link]()
 <br>
-  Genetic Heterogeneity Profiling by Single Cell RNA Sequencing ([GitHub](https://github.com/zhouzilu/DENDRO))
 
 ## Developers & Maintainers
 
