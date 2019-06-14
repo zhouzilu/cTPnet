@@ -24,10 +24,10 @@ This cTPnet package includes two analysis tools: (1) **SAVERX**, we stronly reco
 For different Seurat version, we developed separate vignette see below:
 
 ### Seurat v2
-  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://raw.githubusercontent.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v2.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v2.Rmd).
+  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://raw.githack.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v2.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v2.Rmd).
 
 ### Seurat v3
-  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://raw.githubusercontent.com.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v3.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v3.Rmd).
+  **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://raw.githack.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v3.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v3.Rmd).
 
 
 ## Citation
