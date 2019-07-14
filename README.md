@@ -20,7 +20,7 @@ This cTPnet package includes two analysis tools: (1) **SAVERX**, we stronly reco
 
   **Figure 1.**  *(a)* Overview of cTP-net analysis pipeline, which learns a mapping from the denoised scRNA-seq data to the relative abundance of surface proteins, capturing multi-gene features that reflect the cellular environment and related processes. *(b)* For three example proteins, cross-cell scatter and correlation of CITE-seq measured abundances vs. (1) raw RNA count, (2) SAVER-X denoised RNA level, and (3) cTP-net predicted protein abundance.
 
-## Running cTP-net
+## Installation and running cTP-net
 For different Seurat version, we developed separate vignette see below:
 
 ### Seurat v2
@@ -29,6 +29,7 @@ For different Seurat version, we developed separate vignette see below:
 ### Seurat v3
   **cTP-net R notebook** with step-by-step demonstration and rich display is available [***here***](http://raw.githack.com/zhouzilu/cTPnet/master/vignette/cTPnet_vignette_v3.html). Corresponding **Rmd script** is available [***here***](https://github.com/zhouzilu/cTPnet/blob/master/vignette/cTPnet_vignette_v3.Rmd).
 
+For a "normal" computer, the installation time is < 15mins. Given a dataset of 4000 cells, the running time of cTP-net should be less than 1 mins. No GPU required for running this algorithm.
 
 ## Citation
 
