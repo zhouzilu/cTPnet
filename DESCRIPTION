@@ -1,7 +1,7 @@
 Package: cTPnet
 Type: Package
 Title: Single cell Transcriptome to Protein prediction with deep neural network (cTP-net)
-Version: 1.0.0
+Version: 1.0.1
 Author: Zilu Zhou (zhouzilu@pennmedicine.upenn.edu), Nancy R. Zhang (nzh@wharton.upenn.edu)
 Maintainer: Zilu Zhou <zhouzilu@pennmedicine.upenn.edu>
 Description: While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single cell Transcriptome to Protein prediction with deep neural network (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. 

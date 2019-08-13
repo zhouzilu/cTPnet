@@ -11,7 +11,7 @@
 
 <meta name="author" content="Zilu Zhou" />
 
-<meta name="date" content="2019-06-05" />
+<meta name="date" content="2019-08-12" />
 
 <title>cTP-net Vignette (Seurat v3)</title>
 
@@ -250,10 +250,10 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">cTP-net Vignette (Seurat v3)</h1>
 <h4 class="author">Zilu Zhou</h4>
-<h4 class="date">06/05/2019</h4>
+<h4 class="date">08/12/2019</h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
-<p>While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention. Here we propose a transfer learning framework, single <em>c</em>ell <em>T</em>ranscriptome to <em>P</em>rotein prediction with deep neural <em>net</em>work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our <a href="www.rstudio.com">biorixv preprint, no link yet</a></p>
+<p>While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention. Here we propose a transfer learning framework, single <em>c</em>ell <em>T</em>ranscriptome to <em>P</em>rotein prediction with deep neural <em>net</em>work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our <a href="https://www.biorxiv.org/content/10.1101/671180v1">biorixv preprint</a></p>
 </div>
 
 </div>
@@ -277,7 +277,7 @@ $(document).ready(function () {
 <li><a href="#raw-counts-denoising-with-saver-x">3.1 Raw counts denoising with SAVER-X</a></li>
 <li><a href="#immunophenotype-surface-protein-imputation">3.2 Immunophenotype (surface protein) imputation</a><ul>
 <li><a href="#seurat-v2-pipeline">3.2.1 Seurat v2 pipeline</a></li>
-<li><a href="#following-analysis-modified-from-seurat-v2.4">3.2.2 Following analysis (Modified from <a href="https://satijalab.org/seurat/v2.4/multimodal_vignette.html">Seurat v2.4</a>)</a></li>
+<li><a href="#following-analysis-modified-from-seurat-v3.0">3.2.2 Following analysis (Modified from <a href="https://satijalab.org/seurat/v3.0/multimodal_vignette.html">Seurat v3.0</a>)</a></li>
 <li><a href="#visualize-imputed-protein-levels-on-rna-clusters">3.2.3 Visualize imputed protein levels on RNA clusters</a></li>
 <li><a href="#determine-the-cell-markers-with-helps-from-imputed-proteins">3.2.4 Determine the cell markers with helps from imputed proteins</a></li>
 </ul></li>
@@ -294,7 +294,8 @@ $(document).ready(function () {
 <div id="support-python-package" class="section level3">
 <h3>1.1.1 Support Python package</h3>
 <p>First, install the supporting Python package ctpnetpy. See the source code of the package <a href="http://github.com/zhouzilu/ctpnetpy">here</a></p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pip install ctpnetpy</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pip install cTPnet</code></pre></div>
+<p>If there is problem with PyTorch, refer to <a href="https://pytorch.org/">pytorch website</a> for more details.</p>
 </div>
 <div id="r-package" class="section level3">
 <h3>1.1.2 R package</h3>
@@ -321,7 +322,7 @@ $(document).ready(function () {
 </div>
 <div id="pretrained-model-1" class="section level3">
 <h3>1.2.3 Pretrained model</h3>
-<p>Download the pretrained model from xxxx</p>
+<p>Download the pretrained model from <a href="https://github.com/zhouzilu/ctpnetpy/tree/developing/ctpnet/weight">weights</a>.</p>
 <p>Currently, SAVER-X do not support for super large data sets (test failed for 270,000 cells and 200GB RAM). cTP-net, on the other hand, can predict surface protein abundance relatively accurate without denoising.</p>
 </div>
 </div>
@@ -406,8 +407,8 @@ demo =<span class="st"> </span><span class="kw">cTPnet</span>(demo,data_type,mod
 <span class="co">#&gt; Postprocess...</span>
 <span class="co">#&gt; Done!</span></code></pre></div>
 </div>
-<div id="following-analysis-modified-from-seurat-v2.4" class="section level3">
-<h3>3.2.2 Following analysis (Modified from <a href="https://satijalab.org/seurat/v2.4/multimodal_vignette.html">Seurat v2.4</a>)</h3>
+<div id="following-analysis-modified-from-seurat-v3.0" class="section level3">
+<h3>3.2.2 Following analysis (Modified from <a href="https://satijalab.org/seurat/v3.0/multimodal_vignette.html">Seurat v3.0</a>)</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># standard log-normalization</span>
 demo &lt;-<span class="st"> </span><span class="kw">NormalizeData</span>(demo, <span class="dt">display.progress =</span> <span class="ot">FALSE</span>)
 <span class="co"># choose ~1k variable features</span>
@@ -489,7 +490,7 @@ demo &lt;-<span class="st"> </span><span class="kw">RenameIdents</span>(demo, ne
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] cTPnet_0.1.0      Seurat_3.0.1      reticulate_1.11.1</span>
+<span class="co">#&gt; [1] cTPnet_1.0.1    Seurat_3.0.2    reticulate_1.13</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] nlme_3.1-137        tsne_0.1-3          bitops_1.0-6       </span>
@@ -525,6 +526,9 @@ demo &lt;-<span class="st"> </span><span class="kw">RenameIdents</span>(demo, ne
 </div>
 <div id="references" class="section level1">
 <h1>5. References</h1>
+<p>Surface protein imputation from single cell transcriptomes by deep neural networks</p>
+<p>Zilu Zhou, Chengzhong Ye, Jingshu Wang, Nancy R. Zhang</p>
+<p>bioRxiv 671180; doi: <a href="https://doi.org/10.1101/671180" class="uri">https://doi.org/10.1101/671180</a></p>
 </div>
 
 

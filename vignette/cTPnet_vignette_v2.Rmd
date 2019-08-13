@@ -1,9 +1,9 @@
 ---
 title: "cTP-net Vignette (Seurat v2)"
 author: "Zilu Zhou"
-date: "06/05/2019"#"`r Sys.Date()`"
+date: "08/12/2019"#"`r Sys.Date()`"
 abstract: >
- While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint, no link yet](www.rstudio.com)
+ While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint](https://www.biorxiv.org/content/10.1101/671180v1)
 output: 
   rmarkdown::html_document:
     theme: united
@@ -29,8 +29,10 @@ knitr::opts_chunk$set(
 First, install the supporting Python package ctpnetpy. See the source code of the package [here](http://github.com/zhouzilu/ctpnetpy)
 
 ```python
-pip install ctpnetpy
+pip install cTPnet
 ```
+If there is problem with PyTorch, refer to [pytorch website](https://pytorch.org/) for more details.
+
 ### 1.1.2 R package
 Next, open R and install the R package cTPnet
 ```{r, eval=FALSE}
@@ -57,7 +59,8 @@ Install R pacakge.
 devtools::install_github("jingshuw/SAVERX")
 ```
 ### 1.2.3 Pretrained model
-Download the pretrained model from xxxx
+Download the pretrained model from [weights](https://github.com/zhouzilu/ctpnetpy/tree/developing/ctpnet/weight).
+
 
 Currently, SAVER-X do not support for super large data sets (test failed for 270,000 cells and 200GB RAM). cTP-net, on the other hand, can predict surface protein abundance relatively accurate without denoising.
 
@@ -173,3 +176,8 @@ sessionInfo()
 
 # 5. References
 
+Surface protein imputation from single cell transcriptomes by deep neural networks
+
+Zilu Zhou, Chengzhong Ye, Jingshu Wang, Nancy R. Zhang
+
+bioRxiv 671180; doi: https://doi.org/10.1101/671180
