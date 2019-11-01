@@ -1,7 +1,7 @@
 ---
 title: "cTP-net Vignette (Seurat v2)"
 author: "Zilu Zhou"
-date: "08/12/2019"#"`r Sys.Date()`"
+date: "11/1/2019"#"`r Sys.Date()`"
 abstract: >
  While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint](https://www.biorxiv.org/content/10.1101/671180v1)
 output: 

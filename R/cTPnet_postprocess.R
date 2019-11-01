@@ -11,6 +11,6 @@ postprocess_seurat3=function(seurat_data,y_pred){
 }
 
 postprocess_matrix=function(y_pred){
-  rownames(y_pred)=paste0('cTPnet-',rownames(y_pred))
+  rownames(y_pred)=paste0('ctpnet_',rownames(y_pred))
   return(y_pred)
 }
