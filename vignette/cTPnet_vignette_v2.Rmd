@@ -3,7 +3,7 @@ title: "cTP-net Vignette (Seurat v2)"
 author: "Zilu Zhou"
 date: "11/1/2019"#"`r Sys.Date()`"
 abstract: >
- While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint](https://www.biorxiv.org/content/10.1101/671180v1)
+ While single cell RNA sequencing (scRNA-seq) is invaluable for studying cell populations, cell-surface proteins are often integral markers of cellular function and serve as primary targets for therapeutic intervention.  Here we propose a transfer learning framework, single *c*ell *T*ranscriptome to *P*rotein prediction with deep neural *net*work (cTP-net), to impute surface protein abundances from scRNA-seq data by learning from existing single-cell multi-omic resources. For more detail, please check our [biorixv preprint](https://www.biorxiv.org/content/10.1101/671180v1). See [list of surface proteins](https://github.com/zhouzilu/cTPnet/blob/master/SurfaceProteinList.md) we can predict for now.
 output: 
   rmarkdown::html_document:
     theme: united
@@ -38,8 +38,7 @@ Next, open R and install the R package cTPnet
 ```{r, eval=FALSE}
 devtools::install_github("zhouzilu/cTPnet")
 # If you do not want to update dependencies, please use the following command
-devtools::install_github("zhouzilu/cTPnet", dependencies = FALSE)
-
+devtools::install_github("zhouzilu/cTPnet",dependencies = FALSE)
 ```
 
 ### 1.1.3 Pretrained model
@@ -86,12 +85,15 @@ knitr::include_graphics("https://raw.githubusercontent.com/zhouzilu/cTPnet/maste
   **Figure 1**. *(a)* Overview of cTP-net analysis pipeline, which learns a mapping from the denoised scRNA-seq data to the relative abundance of surface proteins, capturing multi-gene features that reflect the cellular environment and related processes. *(b)* For three example proteins, cross-cell scatter and correlation of CITE-seq measured abundances vs. (1) raw RNA count, (2) SAVER-X denoised RNA level, and (3) cTP-net predicted protein abundance.
 
 ## 3.1 Raw counts denoising with SAVER-X 
-Please refer to [SAVER-X package](https://github.com/jingshuw/SAVERX) for detailed instruction. As for this vignette, we load a demo data set (10000 genes $\times$ 1000 cells) from Human Cell Atalas that has been already denoised with SAVER-X.
+Please refer to [SAVER-X package](https://github.com/jingshuw/SAVERX) for detailed instruction. As for this vignette, we load a demo data set (17009 genes $\times$ 2000 cells) from Bone Marrow Mononuclear Cell that has been already denoised with SAVER-X.
 
 ```{r, message=FALSE, warning=FALSE}
 library(cTPnet)
 library(Seurat)
 library(reticulate)
+# Set python path and virtual environment using reticulate
+use_virtualenv("C:/Users/zhouzilu/Documents/test_ctpnet")
+# The above line has to be called right after loading reticulate library !
 data("cTPnet_demo")
 head(demo_data[,1:6])
 ```
@@ -99,16 +101,9 @@ head(demo_data[,1:6])
 ## 3.2 Immunophenotype (surface protein) imputation
 ### 3.2.1 Seurat v2 pipeline
 
-Set python path and virtual environment using reticulate
-```{r, message=FALSE, warning=FALSE}
-use_python("C:/Users/zhouzilu/AppData/Local/Programs/Python/Python36")
-use_virtualenv("C:/Users/zhouzilu/Documents/test_ctpnet")
-```
-
-
 Let's create a seurat object `demo` and generate the prediction.
 ```{r, message=FALSE, warning=FALSE}
-model_file_path="C:/Users/zhouzilu/Documents/PBMCCBMC_joint_model_1"
+model_file_path="C:/Users/zhouzilu/Documents/cTPnet_weight_24"
 data_type='Seurat2'
 demo = CreateSeuratObject(demo_data)
 demo = cTPnet(demo,data_type,model_file_path)
@@ -130,35 +125,38 @@ PCElbowPlot(demo)
 ```
 
 ```{r fig.height=6, fig.width=6}
-demo <- FindClusters(demo, dims.use = 1:15, print.output = FALSE)
-demo <- RunTSNE(demo, dims.use = 1:15)
+demo <- FindClusters(demo, dims.use = 1:20, print.output = FALSE, k.param = 20, resolution = 0.8)
+demo <- RunTSNE(demo, dims.use = 1:20)
 TSNEPlot(demo, do.label = TRUE, pt.size = 0.5)
 ```
 
 With cTP-net predicted surface protein, it is much easier for us to decided the cell type information.
 
-```{r fig.height=12, fig.width=9}
+```{r fig.height=18, fig.width=9}
 # in this plot, predicted protein levels are on top, and RNA levels are on the
 # bottom
 FeaturePlot(demo, features.plot = c(
   "ctpnet_CD34", "ctpnet_CD4", "ctpnet_CD8", 
   "CD34", "CD4", "CD8A",
   "ctpnet_CD16", "ctpnet_CD11c", "ctpnet_CD19", 
-     "FCGR3A",'ITGAX','CD19'
-     ), min.cutoff = "q05", max.cutoff = "q95", 
+  "FCGR3A",'ITGAX','CD19',
+  "ctpnet_CD45RA", "ctpnet_CD45RO", "ctpnet_CD27", 
+  "PTPRC",'PTPRC','CD27'
+     ), min.cutoff = "q25", max.cutoff = "q95",
     nCol = 3, cols.use = c("lightgrey", "blue"), pt.size = 0.5)
 ```
 
 The cell type information can be easily determined by canonical immunophenotypes (i.e. surface protein markers).
 ```{r fig.height=6, fig.width=7}
-current.cluster.ids <- 0:10
+current.cluster.ids <- 0:13
 # CD4 and CD8 are markers for CD4 T cells and CD8 T cells
+# CD45RA and CD45RO are markers for naive T cells and differentiated T cells
 # CD19 is marker for B cells
+# CD27 is marker for memory B cells
 # CD16 is marker for NK cells
 # CD34 is marker for developing precursor cells
 # CD11c is for tradiational monocyte
-new.cluster.ids <- c("CD4 T", "CD4 T", "B", "CD8 T", "NK", "CD4 T", "Unknown", "Mono", 
-    "NK-CD8 T", "Unknown", "Pre.")
+new.cluster.ids <- c("Mono","naive CD4 T", "naive CD8 T", "CD4 T", "CD8 T", "Mono", "Pre.", "B", "NK", "Pre.", "memory B", "CD16+ Mono", "Unknown", "Unknown")
 demo@ident <- plyr::mapvalues(x = demo@ident, from = current.cluster.ids, to = new.cluster.ids)
 TSNEPlot(demo, do.label = TRUE, pt.size = 0.5)
 ```
