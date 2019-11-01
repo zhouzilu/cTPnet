@@ -99,13 +99,16 @@ head(demo_data[,1:6])
 Set python path and virtual environment using reticulate
 ```{r, message=FALSE, warning=FALSE}
 use_python("C:/Users/zhouzilu/AppData/Local/Programs/Python/Python36")
+use_python("/home/mnt/nzh/project/zhouzilu/citeseq/test_ctpnet/bin/python")
 use_virtualenv("C:/Users/zhouzilu/Documents/test_ctpnet")
+use_virtualenv("/home/stat/zhouzilu/project/zhouzilu/citeseq/test_ctpnet")
 ```
 
 
 Let's create a seurat object `demo` and generate the prediction.
 ```{r, message=FALSE, warning=FALSE}
 model_file_path="C:/Users/zhouzilu/Documents/PBMCCBMC_joint_model_1"
+model_file_path="/home/stat/zhouzilu/project/zhouzilu/citeseq/test_ctpnet/cTPnet_weight_24"
 data_type='Seurat3'
 demo = CreateSeuratObject(demo_data)
 demo = cTPnet(demo,data_type,model_file_path)
