@@ -9,14 +9,14 @@
 #' @return If input is Seurat object, the returned value will also be a Seurat
 #' object; if input is matrix or dataframe, the returned value will be a
 #' dataframe with rows as proteins and columns as cells.
-cTPnet=function(data,data_type='Seurat2',model_file_path){
+cTPnet=function(data,data_type='Seurat2',model_file_path,dprotein=24){
   cat('Start data preprocessing...\n')
 	if(data_type=='Seurat2'){
-		X=preprocess_seurat2(data)
+		X=preprocess_seurat2(data, dprotein)
 	}else if(data_type=='Seurat3'){
-		X=preprocess_seurat3(data)
+		X=preprocess_seurat3(data, dprotein)
 	}else if (data_type=='matrix'|data_type=='dataframe'){
-		X=preprocess_matrix(data)
+		X=preprocess_matrix(data, dprotein)
 	}else{
 		stop('Error: unrecognizable data_type argument. Need to be one of the four\n
 		      options: Seurat2, Seurat3, matrix, dataframe. You can check your \n
@@ -24,7 +24,7 @@ cTPnet=function(data,data_type='Seurat2',model_file_path){
 	}
   cat('Start imputation. Running python ...\n')
 	ctpnet <- reticulate::import("ctpnet", convert = F)
-	y_pred=reticulate::py_to_r(ctpnet$predict$predict(X,model_file_path))
+	y_pred=reticulate::py_to_r(ctpnet$predict$predict(X,model_file_path,dprotein))
 	cat('Postprocess...\n')
 	if(data_type=='Seurat2'){
 	  data=postprocess_seurat2(data,y_pred)
