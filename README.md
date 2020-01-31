@@ -33,9 +33,11 @@ For a "normal" computer, the installation time is < 15mins. Given a dataset of 4
 
 ## Citation
 
-Please cite cTP-net.
+cTP-net paper is now published on Nature Communications.
 
-* **cTP-net**: [link](https://www.biorxiv.org/content/10.1101/671180v1)
+Zhou, Z., Ye, C., Wang, J. et al. Surface protein imputation from single cell transcriptomes by deep neural networks. Nat Commun 11, 651 (2020). https://doi.org/10.1038/s41467-020-14391-0
+
+* **cTP-net**: [link](https://www.nature.com/articles/s41467-020-14391-0)
 <br>
 
 ## Developers & Maintainers
