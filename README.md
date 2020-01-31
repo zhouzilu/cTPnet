@@ -3,7 +3,7 @@ single cell Transcriptome to Protein prediction with deep neural network (cTP-ne
 
 ## Manuscript
 
-[Surface protein imputation from single cell transcriptomes by deep neural networks](https://www.biorxiv.org/content/10.1101/671180v1)
+[Surface protein imputation from single cell transcriptomes by deep neural networks](https://www.nature.com/articles/s41467-020-14391-0)
 
 
 ## Questions & Problems
