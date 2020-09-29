@@ -31,6 +31,9 @@ For different Seurat version, we developed separate vignette see below:
 
 For a "normal" computer, the installation time is < 15mins. Given a dataset of 4000 cells, the running time of cTP-net should be less than 1 mins. No GPU required for running this algorithm.
 
+## Work in progress
+As development in available cite-seq data set, we currently trainig a model that can extend our prediction to 100 surface proteins. Also, due to additional interets in training your own cTP-net model in the computational biology field, we have decided to share our training python code [***here***](https://github.com/zhouzilu/cTPnet/blob/master/extdata/training_05152020.py). Please remember to cite our paper, and contacnt me or Nancy if for commercial usage.
+
 ## Citation
 
 Zhou, Z., Ye, C., Wang, J. et al. Surface protein imputation from single cell transcriptomes by deep neural networks. Nat Commun 11, 651 (2020). https://doi.org/10.1038/s41467-020-14391-0
