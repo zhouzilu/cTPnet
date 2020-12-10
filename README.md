@@ -47,3 +47,11 @@ Zhou, Z., Ye, C., Wang, J. et al. Surface protein imputation from single cell tr
 * [Nancy R. Zhang](https://statistics.wharton.upenn.edu/profile/nzh/) (nzh at wharton dot upenn dot edu)
   <br>
   Department of Statistics, University of Pennsylvania
+
+## Common questions:
+* Error message while running demo `Error in dim(X) <- c(n, length(X)/n) : dims [product 1992] do not match the length of object[2000]`
+  * Add `options(stringsAsFactors = FALSE)` before running the code.
+* Windows user if you see error message `Error in py_module_import(module, convert = convert) : ModuleNotFoundError: No module named 'ctpnet'`
+  * The solution is to use numpy 1.19.3. `pip install numpy==1.19.3`
+  * For more information https://tinyurl.com/y3dm3h86
+  * In general, we don't recommend running cTP-net on a Windows platform even though I had some success at my intital submission of the code.
